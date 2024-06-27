@@ -1,7 +1,7 @@
 #spatialGE.STenrich
 #Thu Jun 27 20:52:13 UTC 2018
 JVMLevel=
-LSID=urn:lsid:genepattern.org:module.analysis:00462:999999999
+LSID=urn:lsid:genepattern.org:module.analysis:00461:999999999
 author=Thorin Tabor;UCSD - Mesirov Lab
 categories=spatial transcriptomics
 commandLine=Rscript /spatialGE/src/wrapper.R -f <input.file> -g <gene.sets.database> -p <permutations> -r <random.seed> -s <minimum.spots> -m <minimum.genes> -d <standard.deviations>
