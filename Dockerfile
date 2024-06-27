@@ -16,6 +16,8 @@ RUN apt-get -y update && apt-get -y install libhdf5-dev libudunits2-dev libv8-de
 RUN mkdir /spatialGE
 WORKDIR /spatialGE
 
-RUN Rscript -e "install.packages(c('systemfonts', 'ggforce', 'ggpubr', 'BiocManager', 'msigdbr', 'rgeos', 'hdf5r', 'remotes', 'openxlsx', 'svglite', 'rdist', 'magick', 'ggtext', 'lsa', 'uwot', 'ggplot2', 'dplyr', 'stringr'))"
+RUN Rscript -e "install.packages(c('systemfonts', 'ggforce', 'ggpubr', 'BiocManager', 'msigdbr', 'rgeos', 'hdf5r', 'remotes', 'openxlsx', 'svglite', 'rdist', 'magick', 'ggtext', 'lsa', 'uwot', 'ggplot2', 'dplyr', 'stringr', 'optparse'))"
 RUN Rscript -e "BiocManager::install(c('EBImage', 'ComplexHeatmap', 'SpatialDecon', 'sparseMatrixStats', 'SummarizedExperiment', 'SingleCellExperiment'), update = TRUE, ask = FALSE)"
 RUN Rscript -e "remotes::install_github(c('JEFworks-Lab/STdeconvolve', 'Nanostring-Biostats/InSituType', 'FridleyLab/spatialGE'))"
+
+COPY ./* /spatialGE

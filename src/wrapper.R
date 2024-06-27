@@ -3,20 +3,20 @@ library('spatialGE')
 
 # Parse the command line options
 parser = OptionParser()
-parser <- add_option(parser, "-f", type = 'character', help = "input.file")
-parser <- add_option(parser, "-g", type = 'character', help = "gene.sets.database")
-parser <- add_option(parser, "-p", type = "integer", help = "permutations")
-parser <- add_option(parser, "-r", type = "integer", help = "random.seed")
-parser <- add_option(parser, "-s", type = "integer", help = "minimum.spots")
-parser <- add_option(parser, "-m", type = "integer", help = "minimum.genes")
-parser <- add_option(parser, "-d", type = "double", help = "standard.deviations")
+parser <- add_option(parser, c("-f", "--file"), type = 'character', help = "input.file")
+parser <- add_option(parser, c("-g", "--genesets"),  type = 'character', help = "gene.sets.database")
+parser <- add_option(parser, c("-p", "--permutations"),  type = "integer", help = "permutations")
+parser <- add_option(parser, c("-r", "--seed"),  type = "integer", help = "random.seed")
+parser <- add_option(parser, c("-s", "--spots"),  type = "integer", help = "minimum.spots")
+parser <- add_option(parser, c("-m", "--genes"),  type = "integer", help = "minimum.genes")
+parser <- add_option(parser, c("-d", "--deviations"),  type = "double", help = "standard.deviations")
 args <- parse_args(parser)
 
 # Load the RDS file
-data <- readRDS(args$f)
+data <- readRDS(args$file)
 
 # Load the gene sets
-raw_file = readLines(args$g)
+raw_file = readLines(args$genesets)
 gene_sets <- lapply(raw_file, function(i) {
     pw_tmp = unlist(strsplit(i, split='\\t'))
     pw_name_tmp = pw_tmp[1]
@@ -34,11 +34,11 @@ names(gene_sets) = pws_names
 # Call STenrich
 stenrich_out <- STenrich(data,
     gene_sets=gene_sets,
-    reps=args$p,
-    seed=args$s,
-    min_units=args$s,
-    min_genes=args$m,
-    num_sds=args$d)
+    reps=args$permutations,
+    seed=args$seed,
+    min_units=args$spots,
+    min_genes=args$genes,
+    num_sds=args$deviations)
 #    cores=1)
 
 # Write dataframes to disk
