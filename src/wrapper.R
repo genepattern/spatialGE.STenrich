@@ -1,5 +1,7 @@
 library('optparse')
 library('spatialGE')
+library('ggplot2')
+library('dplyr')
 
 # Parse the command line options
 parser = OptionParser()
@@ -10,6 +12,8 @@ parser <- add_option(parser, c("-r", "--seed"),  type = "integer", help = "rando
 parser <- add_option(parser, c("-s", "--spots"),  type = "integer", help = "minimum.spots")
 parser <- add_option(parser, c("-m", "--genes"),  type = "integer", help = "minimum.genes")
 parser <- add_option(parser, c("-d", "--deviations"),  type = "double", help = "standard.deviations")
+parser <- add_option(parser, c("-v", "--pvalues"),  type = "double", help = "filter.p.values")
+parser <- add_option(parser, c("-h", "--proportion"),  type = "double", help = "filter.gene.proportion")
 args <- parse_args(parser)
 
 # Load the RDS file
@@ -39,9 +43,31 @@ stenrich_out <- STenrich(data,
     min_units=args$spots,
     min_genes=args$genes,
     num_sds=args$deviations)
-#    cores=1)
+#    cores=1)  # Multiple cores may not work on macOS
 
 # Write dataframes to disk
 for (i in seq_along(stenrich_out)) {
     write.csv(stenrich_out[[i]], file = paste0(names(stenrich_out)[i], ".csv"), row.names = F)
 }
+
+# Generate the plot and write to disk
+res <- bind_rows(stenrich_out) %>%
+  mutate(prop_gene_set=size_test/size_gene_set) %>%
+  filter(prop_gene_set >= args$proportion & adj_p_value < args$pvalues)
+#   mutate(slide=str_extract(sample_name, "Lung5_Rep1|Lung6")) %>%
+#   select(slide, gene_set) %>%
+#   mutate(gene_set=str_replace(gene_set, 'HALLMARK_', ''))
+ggplot(res) +
+  geom_bar(aes(x=gene_set)) +
+  xlab(NULL) +
+  theme(axis.text.x=element_text(angle=70, vjust=1, hjust=1))
+  # facet_wrap(~slide)
+ggsave(
+  "genes_in_fov.png",
+  plot = last_plot(),
+  device = "png",
+  height = 2000,
+  units = "px",
+  dpi = 300,
+  limitsize = TRUE
+)
