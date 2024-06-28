@@ -12,8 +12,8 @@ parser <- add_option(parser, c("-r", "--seed"),  type = "integer", help = "rando
 parser <- add_option(parser, c("-s", "--spots"),  type = "integer", help = "minimum.spots")
 parser <- add_option(parser, c("-m", "--genes"),  type = "integer", help = "minimum.genes")
 parser <- add_option(parser, c("-d", "--deviations"),  type = "double", help = "standard.deviations")
-parser <- add_option(parser, c("-v", "--pvalues"),  type = "double", help = "filter.p.values")
-parser <- add_option(parser, c("-h", "--proportion"),  type = "double", help = "filter.gene.proportion")
+parser <- add_option(parser, c("-w", "--pvalues"),  type = "double", help = "filter.p.values")
+parser <- add_option(parser, c("-i", "--proportion"),  type = "double", help = "filter.gene.proportion")
 args <- parse_args(parser)
 
 # Load the RDS file
