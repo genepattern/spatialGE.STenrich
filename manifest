@@ -1,11 +1,11 @@
 #spatialGE.STenrich
 #Thu Jun 27 20:52:13 UTC 2018
 JVMLevel=
-LSID=urn:lsid:genepattern.org:module.analysis:00462:999999999
+LSID=urn:lsid:genepattern.org:module.analysis:00461:999999999
 author=Thorin Tabor;UCSD - Mesirov Lab
 categories=spatial transcriptomics
-commandLine=Rscript /spatialGE/src/wrapper.R -f <input.file> -g <gene.sets.database> -p <permutations> -r <random.seed> -s <minimum.spots> -m <minimum.genes> -d <standard.deviations>
-job.docker.image=genepattern/spatialge:0.3
+commandLine=Rscript /spatialGE/wrapper.R -f <input.file> -g <gene.sets.database> -p <permutations> -r <random.seed> -s <minimum.spots> -m <minimum.genes> -d <standard.deviations> -w <filter.p.values> -i <filter.gene.proportion>
+job.docker.image=genepattern/spatialge-stenrich:0.4
 src.repo=https://github.com/genepattern/spatialGE.STenrich
 cpuType=any
 description=Detect genes showing spatial expression patterns (e.g., hotspots). Tests if spots/cells with high average expression of a gene set shows evidence of spatial aggregation.
@@ -113,6 +113,34 @@ p7_prefix=
 p7_prefix_when_specified=
 p7_type=java.lang.Float
 p7_value=
+
+p8_MODE=
+p8_TYPE=Float
+p8_default_value=0.05
+p8_description=Plot only gene sets whose multiple test adjusted p-value is less than this threshold.
+p8_fileFormat=
+p8_flag=-d
+p8_name=filter.p.values
+p8_numValues=0..1
+p8_optional=
+p8_prefix=
+p8_prefix_when_specified=
+p8_type=java.lang.Float
+p8_value=
+
+p9_MODE=
+p9_TYPE=Float
+p9_default_value=0.3
+p9_description=Plot only gene sets where the proportional number genes in the set present in the field of view equals or exceeds this threshold.
+p9_fileFormat=
+p9_flag=-d
+p9_name=filter.gene.proportion
+p9_numValues=0..1
+p9_optional=
+p9_prefix=
+p9_prefix_when_specified=
+p9_type=java.lang.Float
+p9_value=
 
 privacy=public
 quality=development

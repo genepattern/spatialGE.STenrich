@@ -1,83 +1,72 @@
-<!-- remove all comments before releasing -->
-<!-- This is the name of the module as it will appear in GenePatter, and its version, for clarity -->
-# ExampleModule (v2)
+# spatialGE.STenrich (v1)
 
-<!-- A brief text description of the module, usually one sentence in length. -->
-**Description**: This is an example GenePattern module written in Python 3. It can be used as a template for future modules. It reads a file and potentially adds a line of text
+Detect genes showing spatial expression patterns (e.g., hotspots). Tests if spots/cells with high average expression of a gene set shows evidence of spatial aggregation.
 
-<!-- This field is for the author or creator of the module. If the algorithm of the module is from a published paper, this is usually the first or corresponding author from the paper. If the module algorithm is unpublished, this is usually the developer of the module itself. This field can simply be a name of a person or group. -->
-**Authors**: Edwin F. Juarez; UCSD - Mesirov Lab, UCSD; Barbara Hill - Mesirov Lab, Broad Institute
+**Authors**: Thorin Tabor; UCSD - Mesirov Lab
 
-<!--This field is used for responding to help requests for the module, and should be an email address or a link to a website with contact information or a help forum. -->
 **Contact**: [Forum Link](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/genepattern-help)
 
-<!-- All modules have a version number associated with them (the last number on the LSID) that is used to differentiate between modules of the same name for reproducibility purposes. However, for publicly released software packages that are wrapped as GenePattern modules, sometimes this version number will be different that the version number of the algorithm itself (e.g. TopHat v7 in GenePattern uses version 2.0.8b of the TopHat algorithm). Since this information is often important to the user, the algorithm version field is an optional attribute that can be used to specify this different version number. Remove this field if not applicable -->
-**Algorithm Version**: _OPTIONAL_ and Not applicable for this particular module
+**Algorithm Version**: [spatialGE 1.2.0](https://fridleylab.github.io/spatialGE/)
 
-<!-- Why use this module? What does it do? If this is one of a set of modules, how does this module fit in the set? How does it work? write overview as if you are explaining to a novice. Include any links or images which would serve to clarify -->
 ## Summary
 
-This is an example GenePattern module written in [Python 3](https://www.python.org/download/releases/3.0/).
-It can be used as a template for future modules. It reads a file and potentially adds a line of text.
+The package [spatialGE](https://fridleylab.github.io/spatialGE/) can be used to detect spatial patterns in gene expression at the gene and gene set level. Data from multiple spatial transcriptomics platforms can be analyzed, as long as gene expression counts per spot or cell are associated with spatial coordinates of those spots/cells.
 
-<!-- appropriate papers should be cited here -->
+This module accepts an RDS file containing a normalized STlist object, such as output by the [spatialGE.Preprocessing](https://github.com/genepattern/spatialGE.Preprocessing) module.
+
+Each row of the output CSV files represents a test for the null hypothesis of no spatial aggregation in the expression of the set in the “gene_set” column. The column “size_test” is the number of genes of a gene set that were present in the FOV. The larger this number the better, as it indicates a better representation of the gene set in the sample. The “adj_p_value” is the multiple test adjusted p-value, which is the value used to decide if a gene set shows significant indications of a spatial pattern (adj_p_value < 0.05).
+
 ## References
 
-<!-- links to your source repository **specific to the release version**, the Docker image used by the module (as specified in your manifest), and (if applicable) the sha link to the Dockerfile used to build your Docker image -->
+Ospina, O. E., Wilson C. M., Soupir, A. C., Berglund, A. Smalley, I., Tsai, K. Y., Fridley, B. L. 2022. spatialGE: quantification and visualization of the tumor microenvironment heterogeneity using spatial transcriptomics. Bioinformatics, 38:2645-2647. https://doi.org/10.1093/bioinformatics/btac145
+
 ## Source Links
-* [The GenePattern ExampleModule v2 source repository](https://github.com/genepattern/ExampleModule/tree/v2)
-* ExampleModule v2 uses the [genepattern/example-module:2 Docker image](https://hub.docker.com/layers/150060459/genepattern/example-module/2/images/sha256-ae4fffff67672e46b251f954ad226b7ad99403c456c1c19911b6ac82f1a27f2f?context=explore)
-* [The Dockerfile used to build that image is here.](https://github.com/genepattern/ExampleModule/blob/v2/Dockerfile)
+* [spatialGE.STenrich source repository](https://github.com/genepattern/spatialGE.STenrich/)
 
 ## Parameters
 <!-- short description of the module parameters and their default values, as well as whether they are required -->
 
-| Name | Description <!--short description--> | Default Value |
----------|--------------|----------------
-| filename * |  The file to be read in txt format |
-| add_custom_message * | Whether or not to add a custom message. | False |
-| message_to_add  | What message to add (if any) |
-| output_filename * | The basename to use for output file (no need to add ".txt" at the end) |
+| Name                 | Description                                                                                                                                                                              | Default Value |
+----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| input file *         | Normalized spatial transcriptomics data coming from the spatialGE.Preprocessing module.                                                                                                  |
+| gene sets database * | Select a gene set database to test for spatial enrichment. Upload a gene set if your gene set is not listed as a choice from MSigDB.                                                     |               |
+| permutations *       | The number of permutations to estimate the null distribution (no-spatial pattern). The more permutations, the longer STenrich takes to complete, but p-values may be more accurate.      | 100           |
+| random seed *        | A seed number to replicate results. It is advisable to run STenrich with different seed values to check for consistency. Different seed values could yield slightly different p-values. | 12345         |
+| minumum spots * | The minimum number of high expression ROIs/spots/cells required for a gene set to be tested. If a sample has less than this number of high expression ROIs/spots/cells, the gene set is not tested in that sample. | 5 |
+| minimum genes * | The minimum number of genes of a set required to be present in a sample, for that gene set to be tested in that sample. If a sample has less genes of a set than this number, the gene set is ignored in that sample. | 5 |
+| standard deviations * | The number of standard deviations to define the high expression threshold. If an ROI/spot/cell has average gene set expression larger than the entire sample average plus this many standard deviations, it will be considered a high-expression ROI/spot/cell. | 1.0 |
+| filter p values * | Plot only gene sets whose multiple test adjusted p-value is less than this threshold. | 0.05 |
+| filter gene proportion * | Plot only gene sets where the proportional number genes in the set present in the field of view equals or exceeds this threshold. | 0.3 |
 
 \*  required
 
 ## Input Files
-<!-- longer descriptions of the module input files. Include information about format and/or preprocessing...etc -->
+1. input.file  
+   Accepts an RDS file containing a normalized STlist object, such as output by the [spatialGE.Preprocessing](https://github.com/genepattern/spatialGE.Preprocessing) module.
 
-1. filename  
-    A long form explanation of the parameter. For example: This is the file which will be read in by the python script and to which text will be added, if add_custom_message is set to true. The parameter expects a text file with a .txt extension (e.g. file.txt)
     
 ## Output Files
-<!-- list and describe any files output by the module -->
-
-1. \<output_filename\>.txt  
-    The input file plus any text you added, if you chose to add text.
-2. stdout.txt
-    This is standard output from the Python script. Sometimes helpful for debugging.
+1. **\*.csv**  
+   Each row of the output CSV files represents a test for the null hypothesis of no spatial aggregation in the expression of the set in the “gene_set” column. The column “size_test” is the number of genes of a gene set that were present in the FOV. The larger this number the better, as it indicates a better representation of the gene set in the sample. The “adj_p_value” is the multiple test adjusted p-value, which is the value used to decide if a gene set shows significant indications of a spatial pattern (adj_p_value < 0.05).
+2. **genes_in_fov.png**  
+    A visual summary of the gene sets with an adjusted p-value below the specified threshold and with the number of genes of a gene set that were present in the FOV being equal to or greater than the specified proportion.
 
 ## Example Data
 <!-- provide links to example data so that users can see what input & output should look like and so that they and we can use it to test -->
 
 Input:  
-[data_placeholder.txt](https://github.com/genepattern/ExampleModule/blob/v2/data/data_placeholder.txt)
-
-Output:  
-[created_file_ground_truth.txt](https://github.com/genepattern/ExampleModule/blob/v2/gpunit/output/basic_test/created_file_ground_truth.txt)
-
+[lung.rds](https://github.com/genepattern/spatialGE.STenrich/blob/main/data/lung.rds)
 
 ## Requirements
-<!--This section is typically used to list any special requirements for running the module, such as, language/operating system requirements and Docker images. -->
 
-Requires the [genepattern/example-module:2 Docker image](https://hub.docker.com/layers/150060459/genepattern/example-module/2/images/sha256-ae4fffff67672e46b251f954ad226b7ad99403c456c1c19911b6ac82f1a27f2f?context=explore).
+Requires the [genepattern/spatialge-stenrich:0.4 Docker image](https://hub.docker.com/layers/genepattern/spatialge-stenrich/0.4/images/sha256-11d9de50d721c27fd02edd8f65f0bd17fe4d5e8ea7c99b13236b8daf092c2c10?context=explore).
 
 ## License
 
-`ExampleModule` is distributed under a modified BSD license available at [https://github.com/genepattern/ExampleModule/blob/v2/LICENSE.](https://github.com/genepattern/ExampleModule/blob/v2/LICENSE)
+`spatialGE.STenrich` is distributed under a BSD-style license available at [https://github.com/genepattern/spatialGE.STenrich/blob/main/LICENSE.](https://github.com/genepattern/spatialGE.STenrich/blob/main/LICENSE)
 
 ## Version Comments
-<!--For each version of a module, provide a short comment about what was changed in the new version of a module. Version comments consist of 3 parts: a date, a version number, and a short description. The date should be the release date of that version of the module, and the version number should match the version of the module for which it corresponds to. The description can be short, but should be informative (e.g. "added support for log transformed data", or "fixed bug with out of memory exception"). When a user views the documentation, all version comments up to and including the current version will be displayed, and act as a short version history for the module. -->
 
-| Version | Release Date | Description                                 |
-----------|--------------|---------------------------------------------|
-|  1.4  | May 17, 2021 | Added all GenePattern Team module release requirements and renamed as ExampleModule, from ABasicModule. |
-| 1 | May 1, 2018 | Initial version for team use. |
+| Version | Release Date  | Description                       |
+----------|---------------|-----------------------------------|
+| 1 | June 28, 2024 | Initial version |

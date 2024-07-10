@@ -1,0 +1,25 @@
+[
+  {
+    "name": "Enrichment Options",
+    "description": "Parameters are used to configure the STenrich method",
+    "hidden": false,
+    "parameters": [
+      "input.file",
+      "gene.sets.database",
+      "permutations",
+      "random.seed",
+      "minimum.spots",
+      "minimum.genes",
+      "standard.deviations"
+    ]
+  },
+  {
+    "name": "Visualization Options",
+    "description": "Parameters used to configure the generated plot",
+    "hidden": false,
+    "parameters": [
+      "filter.p.values",
+      "filter.gene.proportion"
+    ]
+  }
+]
