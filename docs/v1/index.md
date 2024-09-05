@@ -1,8 +1,13 @@
 # spatialGE.STenrich (v1)
 
-Detect genes showing spatial expression patterns (e.g., hotspots). Tests if spots/cells with high average expression of a gene set shows evidence of spatial aggregation.
+The `spatialGE.Preprocessing` module is part of the spatialGE package. It detects genes showing spatial expression patterns (e.g., hotspots) and tests if spots/cells with a high average expression of a gene set show evidence of spatial aggregation.
 
-**Authors**: Thorin Tabor; UCSD - Mesirov Lab
+## Module Details
+
+- **Authors:** Thorin Tabor, Ted Liefeld, Edwin Huang, Michael Reich; UCSD - Mesirov Lab
+- **Categories:** spatial transcriptomics
+- **Source repository:** [spatialGE.Preprocessing on GitHub](https://github.com/genepattern/spatialGE.STenrich)
+- **Contact**: [GenePattern Help Forum](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/genepattern-help)
 
 **Contact**: [Forum Link](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/genepattern-help)
 
