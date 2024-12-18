@@ -71,3 +71,5 @@ ggsave(
   dpi = 300,
   limitsize = TRUE
 )
+
+saveRDS(stenrich_out, file='enrich_stlist.rds')

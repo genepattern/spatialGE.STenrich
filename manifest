@@ -147,4 +147,4 @@ quality=development
 taskDoc=
 taskType=spatial transcriptomics
 userid=tabor
-version=Initial development release
+version=Write stlist rds to disk
